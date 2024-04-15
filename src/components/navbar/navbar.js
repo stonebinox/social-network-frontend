@@ -16,8 +16,9 @@ export const NavbarComponent = ({
   setLoggedIn,
   loggedIn,
   logout,
-  setSelectedUser,
+  userClick,
   notificationsCount = 0,
+  notificationsClick,
 }) => {
   const [username, setUsername] = useState("");
   const [search, setSearch] = useState("");
@@ -58,7 +59,7 @@ export const NavbarComponent = ({
   };
 
   const selectUser = (username) => {
-    setSelectedUser(username);
+    userClick(username);
     setSearchResults([]);
     setSearch("");
   };
@@ -101,7 +102,7 @@ export const NavbarComponent = ({
               <Row>
                 <Col xs="auto">
                   <Nav>
-                    <Nav.Link href="#">
+                    <Nav.Link href="#" onClick={notificationsClick}>
                       Notifications ({notificationsCount})
                     </Nav.Link>
                   </Nav>
