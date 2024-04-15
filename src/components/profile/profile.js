@@ -159,26 +159,34 @@ export const Profile = ({ username = null, userClick }) => {
 
   const getPendingRequestsData = () => {
     const user = JSON.parse(localStorage.getItem("user"));
-    getPendingRequests(user?.id)
-      .then((response) => response.json())
-      .then((data) => {
-        const { data: friends } = data;
+    if (user) {
+      getPendingRequests(user?.id)
+        .then((response) => response.json())
+        .then((data) => {
+          const { data: friends } = data;
 
-        const promises = friends.map((friend) => {
-          return getUserDataById(friend.user_id)
-            .then((response) => response.json())
-            .then((data) => data);
+          const promises = friends.map((friend) => {
+            return getUserDataById(friend.user_id)
+              .then((response) => response.json())
+              .then((data) => data);
+          });
+
+          Promise.all(promises).then((responses) =>
+            setPendingFriends(responses)
+          );
+
+          setTimeout(() => {
+            getPendingRequestsData();
+          }, 7000);
+        })
+        .catch((e) => {
+          console.log(e);
+
+          if (e.error) {
+            alert(e.error);
+          }
         });
-
-        Promise.all(promises).then((responses) => setPendingFriends(responses));
-      })
-      .catch((e) => {
-        console.log(e);
-
-        if (e.error) {
-          alert(e.error);
-        }
-      });
+    }
   };
 
   useEffect(() => {

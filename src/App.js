@@ -13,23 +13,25 @@ function App() {
   const [displayNotifications, setDisplayNotifications] = useState(false);
 
   const loadNotifications = (userId) => {
-    getNotifications(userId)
-      .then((response) => response.json())
-      .then((data) => {
-        const { data: notificationList } = data;
-        setNotifications(notificationList);
+    if (localStorage.getItem("user")) {
+      getNotifications(userId)
+        .then((response) => response.json())
+        .then((data) => {
+          const { data: notificationList } = data;
+          setNotifications(notificationList);
 
-        setTimeout(() => {
-          loadNotifications(userId);
-        }, 5000);
-      })
-      .catch((e) => {
-        console.log(e);
+          setTimeout(() => {
+            loadNotifications(userId);
+          }, 5000);
+        })
+        .catch((e) => {
+          console.log(e);
 
-        if (e.error) {
-          alert(e.error);
-        }
-      });
+          if (e.error) {
+            alert(e.error);
+          }
+        });
+    }
   };
 
   const getLocalSession = () => {
