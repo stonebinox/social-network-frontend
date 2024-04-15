@@ -58,6 +58,7 @@ export const NavbarComponent = ({
   const selectUser = (username) => {
     setSelectedUser(username);
     setSearchResults([]);
+    setSearch("");
   };
 
   useEffect(() => {

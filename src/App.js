@@ -17,6 +17,7 @@ function App() {
   const logout = () => {
     localStorage.removeItem("user");
     setLoggedIn(false);
+    setSelectedUser(null);
   };
 
   useEffect(() => {
