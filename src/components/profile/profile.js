@@ -3,6 +3,7 @@ import { Container } from "react-bootstrap";
 
 import { getUserData, getUserDataById, getUserFriends } from "../../api/api";
 import "./profile.css";
+import { StatusUpdates } from "../status-updates/status-updates";
 
 export const Profile = ({ username = null }) => {
   const [profile, setProfile] = useState(null);
@@ -17,7 +18,7 @@ export const Profile = ({ username = null }) => {
     getUserData(passedUsername)
       .then((response) => response.json())
       .then((data) => {
-        setProfile(data);
+        setProfile(data.data);
       })
       .catch((e) => {
         console.log(e);
@@ -77,6 +78,7 @@ export const Profile = ({ username = null }) => {
             </li>
           ))}
         </ul>
+        {username !== null && <StatusUpdates userId={profile.id} />}
       </Container>
     </div>
   );

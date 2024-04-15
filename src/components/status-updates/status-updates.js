@@ -54,7 +54,7 @@ export const StatusUpdates = ({ userId = null }) => {
   return (
     <div className="status-updates">
       <Container>
-        {(currentUserId === userId || userId === null) && (
+        {userId === null && (
           <>
             <Form>
               <Form.Group className="mb-3">

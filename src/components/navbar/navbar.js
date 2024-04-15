@@ -11,7 +11,12 @@ import {
 import { login, searchUsers } from "../../api/api";
 import "./navbar.css";
 
-export const NavbarComponent = ({ setLoggedIn, loggedIn, logout }) => {
+export const NavbarComponent = ({
+  setLoggedIn,
+  loggedIn,
+  logout,
+  setSelectedUser,
+}) => {
   const [username, setUsername] = useState("");
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -48,6 +53,11 @@ export const NavbarComponent = ({ setLoggedIn, loggedIn, logout }) => {
           alert(e.error);
         }
       });
+  };
+
+  const selectUser = (username) => {
+    setSelectedUser(username);
+    setSearchResults([]);
   };
 
   useEffect(() => {
@@ -97,7 +107,11 @@ export const NavbarComponent = ({ setLoggedIn, loggedIn, logout }) => {
                   <div className="search-container">
                     <ListGroup>
                       {searchResults.map((result, i) => (
-                        <ListGroup.Item key={i} action="true">
+                        <ListGroup.Item
+                          key={i}
+                          action="true"
+                          onClick={() => selectUser(result.username)}
+                        >
                           {result.username}
                         </ListGroup.Item>
                       ))}

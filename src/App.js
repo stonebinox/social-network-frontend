@@ -6,6 +6,7 @@ import { StatusUpdates } from "./components/status-updates/status-updates";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
 
   const getLocalSession = () => {
     if (localStorage.getItem("user")) {
@@ -28,6 +29,7 @@ function App() {
         setLoggedIn={setLoggedIn}
         loggedIn={loggedIn}
         logout={logout}
+        setSelectedUser={setSelectedUser}
       />
       {loggedIn && (
         <Container>
@@ -36,7 +38,11 @@ function App() {
               <Profile />
             </Col>
             <Col sm="8">
-              <StatusUpdates />
+              {!selectedUser ? (
+                <StatusUpdates />
+              ) : (
+                <Profile username={selectedUser} />
+              )}
             </Col>
           </Row>
         </Container>
