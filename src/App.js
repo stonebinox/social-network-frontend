@@ -13,13 +13,22 @@ function App() {
     }
   };
 
+  const logout = () => {
+    localStorage.removeItem("user");
+    setLoggedIn(false);
+  };
+
   useEffect(() => {
     getLocalSession();
   }, []);
 
   return (
     <div>
-      <NavbarComponent setLoggedIn={setLoggedIn} loggedIn={loggedIn} />
+      <NavbarComponent
+        setLoggedIn={setLoggedIn}
+        loggedIn={loggedIn}
+        logout={logout}
+      />
       {loggedIn && (
         <Container>
           <Row>

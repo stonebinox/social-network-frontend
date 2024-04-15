@@ -68,7 +68,7 @@ export const Profile = ({ username = null }) => {
   return (
     <div className="profile-container">
       <Container>
-        <h4 className="text-center">{profileUsername}</h4>
+        <h4>{profileUsername}</h4>
         <h6>Friends ({friends.length})</h6>
         <ul>
           {friends.map((friend, i) => (

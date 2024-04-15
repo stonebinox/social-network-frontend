@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Col, Container, Form, Navbar, Row } from "react-bootstrap";
 import { login } from "../../api/api";
 
-export const NavbarComponent = ({ setLoggedIn, loggedIn }) => {
+export const NavbarComponent = ({ setLoggedIn, loggedIn, logout }) => {
   const [username, setUsername] = useState("");
 
   const loginClick = () => {
@@ -29,8 +29,8 @@ export const NavbarComponent = ({ setLoggedIn, loggedIn }) => {
       <Container>
         <Navbar.Brand href="#">KOR</Navbar.Brand>
 
-        {!loggedIn && (
-          <Form inline="true">
+        {!loggedIn ? (
+          <Form inline="true" onSubmit={(e) => e.preventDefault()}>
             <Row>
               <Col xs="auto">
                 <Form.Control
@@ -47,6 +47,30 @@ export const NavbarComponent = ({ setLoggedIn, loggedIn }) => {
               </Col>
             </Row>
           </Form>
+        ) : (
+          <>
+            <Form inline="true" onSubmit={(e) => e.preventDefault()}>
+              <Row>
+                <Col xs="auto">
+                  <Form.Control
+                    type="search"
+                    placeholder="search for users"
+                    className="mr-sm-2"
+                  />
+                </Col>
+                <Col xs="auto">
+                  <Button type="button" variant="primary">
+                    Search
+                  </Button>
+                </Col>
+                <Col xs="auto">
+                  <Button type="button" variant="secondary" onClick={logout}>
+                    Log out
+                  </Button>
+                </Col>
+              </Row>
+            </Form>
+          </>
         )}
       </Container>
     </Navbar>
