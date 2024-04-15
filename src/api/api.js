@@ -35,3 +35,13 @@ export const sendRequest = (userId, friendId) =>
   fetch(`${base}/friend?user_id=${userId}&friend_id=${friendId}`, {
     method: "POST",
   });
+
+export const acceptRequest = (id) =>
+  fetch(`${base}/friend/accept?request_id=${id}`, {
+    method: "POST",
+  });
+
+export const rejectRequest = (id) =>
+  fetch(`${base}/friend/reject?request_id=${id}`, {
+    method: "POST",
+  });

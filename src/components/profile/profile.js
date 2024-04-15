@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Container, Button } from "react-bootstrap";
+import { Container, Button, ButtonGroup } from "react-bootstrap";
 
 import {
+  acceptRequest,
   getFriendship,
   getUserData,
   getUserDataById,
   getUserFriends,
+  rejectRequest,
   sendRequest,
 } from "../../api/api";
 import "./profile.css";
@@ -80,13 +82,18 @@ export const Profile = ({ username = null }) => {
   const getFriendButton = () => {
     if (!friendData) return;
 
-    const { status, user_id, friend_id } = friendData;
+    const { status, user_id, friend_id, id } = friendData;
 
     if (status === 1 && profile.id === user_id) {
       return (
-        <Button variant="success" size="sm">
-          Accept friend request
-        </Button>
+        <ButtonGroup>
+          <Button variant="success" size="sm" onClick={() => acceptClick(id)}>
+            Accept friend request
+          </Button>
+          <Button variant="danger" size="sm" onClick={() => rejectClick(id)}>
+            Reject friend request
+          </Button>
+        </ButtonGroup>
       );
     } else if (status === 1 && profile.id === friend_id) {
       return (
@@ -104,6 +111,37 @@ export const Profile = ({ username = null }) => {
 
     const loggedInUser = JSON.parse(localStorage.getItem("user"));
     sendRequest(loggedInUser.id, profile.id)
+      .then((response) => response.json())
+      .then((data) => {
+        setDisplayAddFriend(false);
+        getFriendsData();
+      })
+      .catch((e) => {
+        console.log(e);
+
+        if (e.error) {
+          alert(e.error);
+        }
+      });
+  };
+
+  const acceptClick = (id) => {
+    acceptRequest(id)
+      .then((response) => response.json())
+      .then((data) => {
+        getFriendsData();
+      })
+      .catch((e) => {
+        console.log(e);
+
+        if (e.error) {
+          alert(e.error);
+        }
+      });
+  };
+
+  const rejectClick = (id) => {
+    rejectRequest(id)
       .then((response) => response.json())
       .then((data) => {
         getFriendsData();
