@@ -30,3 +30,8 @@ export const searchUsers = (search) =>
 
 export const getFriendship = (userId, friendId) =>
   fetch(`${base}/friendship?user_id=${userId}&friend_id=${friendId}`);
+
+export const sendRequest = (userId, friendId) =>
+  fetch(`${base}/friend?user_id=${userId}&friend_id=${friendId}`, {
+    method: "POST",
+  });

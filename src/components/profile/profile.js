@@ -6,6 +6,7 @@ import {
   getUserData,
   getUserDataById,
   getUserFriends,
+  sendRequest,
 } from "../../api/api";
 import "./profile.css";
 import { StatusUpdates } from "../status-updates/status-updates";
@@ -81,13 +82,13 @@ export const Profile = ({ username = null }) => {
 
     const { status, user_id, friend_id } = friendData;
 
-    if (status === "1" && profile.id === user_id) {
+    if (status === 1 && profile.id === user_id) {
       return (
         <Button variant="success" size="sm">
           Accept friend request
         </Button>
       );
-    } else if (status === "1" && profile.id === friend_id) {
+    } else if (status === 1 && profile.id === friend_id) {
       return (
         <Button variant="primary" size="sm" disabled="true">
           Awaiting confirmation
@@ -96,6 +97,24 @@ export const Profile = ({ username = null }) => {
     }
 
     return null;
+  };
+
+  const requestClick = () => {
+    if (username === null) return;
+
+    const loggedInUser = JSON.parse(localStorage.getItem("user"));
+    sendRequest(loggedInUser.id, profile.id)
+      .then((response) => response.json())
+      .then((data) => {
+        getFriendsData();
+      })
+      .catch((e) => {
+        console.log(e);
+
+        if (e.error) {
+          alert(e.error);
+        }
+      });
   };
 
   useEffect(() => {
@@ -120,12 +139,13 @@ export const Profile = ({ username = null }) => {
     <div className="profile-container">
       <Container>
         <h4>{profileUsername}</h4>
-        {displayAddFriend && (
-          <Button variant="primary" size="sm">
+        {displayAddFriend ? (
+          <Button variant="primary" size="sm" onClick={requestClick}>
             + Send friend request
           </Button>
+        ) : (
+          getFriendButton()
         )}
-        {getFriendButton()}
         <hr />
         <h6>Friends ({friends.length})</h6>
         <ul>
