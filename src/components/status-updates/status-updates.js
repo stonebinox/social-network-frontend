@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Container, ListGroup } from "react-bootstrap";
+import { Button, Container, Form, ListGroup } from "react-bootstrap";
 
 import "./status-updates.css";
-import { getStatusUpdates } from "../../api/api";
+import { getStatusUpdates, postStatusUpdate } from "../../api/api";
 
 export const StatusUpdates = ({ userId = null }) => {
   const [updates, setUpdates] = useState([]);
+  const [updateContent, setUpdateContent] = useState("");
+  const [currentUserId, setCurrentUserId] = useState(null);
 
   const getUserUpdates = (id) => {
     getStatusUpdates(id)
@@ -20,18 +22,59 @@ export const StatusUpdates = ({ userId = null }) => {
       });
   };
 
+  const postUpdate = () => {
+    if (updateContent.trim() === "") return;
+
+    postStatusUpdate(currentUserId, updateContent)
+      .then((response) => response.json())
+      .then((data) => {
+        setUpdateContent("");
+        getUserUpdates(currentUserId);
+      })
+      .catch((e) => {
+        console.log(e);
+
+        if (e.error) {
+          alert(e.error);
+        }
+      });
+  };
+
   useEffect(() => {
     if (userId === null) {
       const user = JSON.parse(localStorage.getItem("user"));
       getUserUpdates(user.id);
+      setCurrentUserId(user.id);
     } else {
       getUserUpdates(userId);
+      setCurrentUserId(userId);
     }
   }, [userId]);
 
   return (
     <div className="status-updates">
       <Container>
+        <Form>
+          <Form.Group className="mb-3">
+            <Form.Label>Post an update</Form.Label>
+            <Form.Control
+              as="textarea"
+              rows="3"
+              placeholder="Post about something you ate"
+              onChange={(e) => setUpdateContent(e.currentTarget.value)}
+              value={updateContent}
+            />
+          </Form.Group>
+          <Button
+            variant="primary"
+            type="button"
+            className="flex-end"
+            onClick={postUpdate}
+          >
+            Post
+          </Button>
+        </Form>
+        <hr />
         <h5>Status updates ({updates.length})</h5>
         <ListGroup>
           {updates.map((update, i) => {

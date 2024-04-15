@@ -16,3 +16,11 @@ export const getUserDataById = (userId) =>
 
 export const getStatusUpdates = (userId) =>
   fetch(`${base}/status/user?user_id=${userId}`);
+
+export const postStatusUpdate = (userId, description) =>
+  fetch(
+    `${base}/status?user_id=${userId}&description=${encodeURI(description)}`,
+    {
+      method: "POST",
+    }
+  );
