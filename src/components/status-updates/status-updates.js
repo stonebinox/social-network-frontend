@@ -54,27 +54,31 @@ export const StatusUpdates = ({ userId = null }) => {
   return (
     <div className="status-updates">
       <Container>
-        <Form>
-          <Form.Group className="mb-3">
-            <Form.Label>Post an update</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows="3"
-              placeholder="Post about something you ate"
-              onChange={(e) => setUpdateContent(e.currentTarget.value)}
-              value={updateContent}
-            />
-          </Form.Group>
-          <Button
-            variant="primary"
-            type="button"
-            className="flex-end"
-            onClick={postUpdate}
-          >
-            Post
-          </Button>
-        </Form>
-        <hr />
+        {(currentUserId === userId || userId === null) && (
+          <>
+            <Form>
+              <Form.Group className="mb-3">
+                <Form.Label>Post an update</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  rows="3"
+                  placeholder="Post about something you ate"
+                  onChange={(e) => setUpdateContent(e.currentTarget.value)}
+                  value={updateContent}
+                />
+              </Form.Group>
+              <Button
+                variant="primary"
+                type="button"
+                className="flex-end"
+                onClick={postUpdate}
+              >
+                Post
+              </Button>
+            </Form>
+            <hr />
+          </>
+        )}
         <h5>Status updates ({updates.length})</h5>
         <ListGroup>
           {updates.map((update, i) => {

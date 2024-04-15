@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { NavbarComponent } from "./components/navbar/navbar";
-import { Col, Row } from "react-bootstrap";
+import { Col, Row, Container } from "react-bootstrap";
 import { Profile } from "./components/profile/profile";
 import { StatusUpdates } from "./components/status-updates/status-updates";
 
@@ -21,14 +21,16 @@ function App() {
     <div>
       <NavbarComponent setLoggedIn={setLoggedIn} loggedIn={loggedIn} />
       {loggedIn && (
-        <Row>
-          <Col sm="4">
-            <Profile />
-          </Col>
-          <Col sm="8">
-            <StatusUpdates />
-          </Col>
-        </Row>
+        <Container>
+          <Row>
+            <Col sm="4">
+              <Profile />
+            </Col>
+            <Col sm="8">
+              <StatusUpdates />
+            </Col>
+          </Row>
+        </Container>
       )}
     </div>
   );
