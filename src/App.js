@@ -96,13 +96,13 @@ function App() {
         <Container>
           <Row>
             <Col sm="4">
-              <Profile />
+              <Profile userClick={userClick} />
             </Col>
             <Col sm="8">
               {!selectedUser && !displayNotifications ? (
                 <StatusUpdates />
               ) : selectedUser ? (
-                <Profile username={selectedUser} />
+                <Profile username={selectedUser} userClick={userClick} />
               ) : displayNotifications ? (
                 <Notifications
                   notifications={notifications}

@@ -13,7 +13,7 @@ import {
 import "./profile.css";
 import { StatusUpdates } from "../status-updates/status-updates";
 
-export const Profile = ({ username = null }) => {
+export const Profile = ({ username = null, userClick }) => {
   const [profile, setProfile] = useState(null);
   const [friends, setFriends] = useState([]);
   const [displayAddFriend, setDisplayAddFriend] = useState(false);
@@ -187,11 +187,18 @@ export const Profile = ({ username = null }) => {
         <hr />
         <h6>Friends ({friends.length})</h6>
         <ul>
-          {friends.map((friend, i) => (
-            <li key={i}>
-              <a href="#profile">{friend.data.username}</a>
-            </li>
-          ))}
+          {friends.map((friend, i) => {
+            return (
+              <li key={i}>
+                <a
+                  href="#profile"
+                  onClick={() => userClick(friend.data.username)}
+                >
+                  {friend.data.username}
+                </a>
+              </li>
+            );
+          })}
         </ul>
         {username !== null && <StatusUpdates userId={profile.id} />}
       </Container>
