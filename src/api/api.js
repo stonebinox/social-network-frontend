@@ -27,3 +27,6 @@ export const postStatusUpdate = (userId, description) =>
 
 export const searchUsers = (search) =>
   fetch(`${base}/users?search=${encodeURI(search)}`);
+
+export const getFriendship = (userId, friendId) =>
+  fetch(`${base}/friendship?user_id=${userId}&friend_id=${friendId}`);

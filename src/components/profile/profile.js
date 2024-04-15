@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Container } from "react-bootstrap";
+import { Container, Button } from "react-bootstrap";
 
-import { getUserData, getUserDataById, getUserFriends } from "../../api/api";
+import {
+  getFriendship,
+  getUserData,
+  getUserDataById,
+  getUserFriends,
+} from "../../api/api";
 import "./profile.css";
 import { StatusUpdates } from "../status-updates/status-updates";
 
 export const Profile = ({ username = null }) => {
   const [profile, setProfile] = useState(null);
   const [friends, setFriends] = useState([]);
+  const [displayAddFriend, setDisplayAddFriend] = useState(false);
+  const [friendData, setFriendData] = useState(null);
 
   const getLoggedInUser = () => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -46,6 +53,49 @@ export const Profile = ({ username = null }) => {
 
         Promise.all(promises).then((responses) => setFriends(responses));
       });
+
+    if (username !== null) {
+      const loggedInUser = JSON.parse(localStorage.getItem("user"));
+
+      getFriendship(loggedInUser.id, profile.id)
+        .then((response) => response.json())
+        .then((data) => {
+          const { success, data: friendship } = data;
+
+          if (loggedInUser.id === profile.id) {
+            setDisplayAddFriend(false);
+            return;
+          }
+
+          if (success && friendship === null) {
+            setDisplayAddFriend(true);
+          } else if (success && friendship !== null) {
+            setFriendData(friendship);
+          }
+        });
+    }
+  };
+
+  const getFriendButton = () => {
+    if (!friendData) return;
+
+    const { status, user_id, friend_id } = friendData;
+
+    if (status === "1" && profile.id === user_id) {
+      return (
+        <Button variant="success" size="sm">
+          Accept friend request
+        </Button>
+      );
+    } else if (status === "1" && profile.id === friend_id) {
+      return (
+        <Button variant="primary" size="sm" disabled="true">
+          Awaiting confirmation
+        </Button>
+      );
+    }
+
+    return null;
   };
 
   useEffect(() => {
@@ -70,6 +120,13 @@ export const Profile = ({ username = null }) => {
     <div className="profile-container">
       <Container>
         <h4>{profileUsername}</h4>
+        {displayAddFriend && (
+          <Button variant="primary" size="sm">
+            + Send friend request
+          </Button>
+        )}
+        {getFriendButton()}
+        <hr />
         <h6>Friends ({friends.length})</h6>
         <ul>
           {friends.map((friend, i) => (
