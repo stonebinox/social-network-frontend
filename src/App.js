@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { NavbarComponent } from "./components/navbar";
+import { NavbarComponent } from "./components/navbar/navbar";
 import { Col, Row } from "react-bootstrap";
+import { Profile } from "./components/profile/profile";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -19,8 +20,10 @@ function App() {
     <div>
       <NavbarComponent setLoggedIn={setLoggedIn} loggedIn={loggedIn} />
       <Row>
-        <Col xs="auto">hello</Col>
-        <Col xs="auto">main</Col>
+        <Col sm="4">
+          <Profile />
+        </Col>
+        <Col sm="8">main</Col>
       </Row>
     </div>
   );

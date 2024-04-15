@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Col, Container, Form, Navbar, Row } from "react-bootstrap";
-import { login } from "../api/api";
+import { login } from "../../api/api";
 
 export const NavbarComponent = ({ setLoggedIn, loggedIn }) => {
   const [username, setUsername] = useState("");
