@@ -48,3 +48,6 @@ export const rejectRequest = (id) =>
 
 export const getNotifications = (userId) =>
   fetch(`${base}/notifications?user_id=${userId}`);
+
+export const getPendingRequests = (userId) =>
+  fetch(`${base}/friends/pending?user_id=${userId}`);

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Container, Button, ButtonGroup } from "react-bootstrap";
+import { Container, Button, ButtonGroup, ListGroup } from "react-bootstrap";
 
 import {
   acceptRequest,
   getFriendship,
+  getPendingRequests,
   getUserData,
   getUserDataById,
   getUserFriends,
@@ -18,6 +19,7 @@ export const Profile = ({ username = null, userClick }) => {
   const [friends, setFriends] = useState([]);
   const [displayAddFriend, setDisplayAddFriend] = useState(false);
   const [friendData, setFriendData] = useState(null);
+  const [pendingFriends, setPendingFriends] = useState([]);
 
   const getLoggedInUser = () => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -155,12 +157,38 @@ export const Profile = ({ username = null, userClick }) => {
       });
   };
 
+  const getPendingRequestsData = () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    getPendingRequests(user?.id)
+      .then((response) => response.json())
+      .then((data) => {
+        const { data: friends } = data;
+
+        const promises = friends.map((friend) => {
+          return getUserDataById(friend.user_id)
+            .then((response) => response.json())
+            .then((data) => data);
+        });
+
+        Promise.all(promises).then((responses) => setPendingFriends(responses));
+      })
+      .catch((e) => {
+        console.log(e);
+
+        if (e.error) {
+          alert(e.error);
+        }
+      });
+  };
+
   useEffect(() => {
     if (username === null) {
       getLoggedInUser();
+      getPendingRequestsData();
     } else {
       getUser(username);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [username]);
 
   useEffect(() => {
@@ -186,20 +214,38 @@ export const Profile = ({ username = null, userClick }) => {
         )}
         <hr />
         <h6>Friends ({friends.length})</h6>
-        <ul>
+        <ListGroup>
           {friends.map((friend, i) => {
             return (
-              <li key={i}>
-                <a
-                  href="#profile"
-                  onClick={() => userClick(friend.data.username)}
-                >
-                  {friend.data.username}
-                </a>
-              </li>
+              <ListGroup.Item
+                action="true"
+                key={i}
+                onClick={() => userClick(friend.data.username)}
+              >
+                {friend.data.username}
+              </ListGroup.Item>
             );
           })}
-        </ul>
+        </ListGroup>
+        {pendingFriends.length > 0 && (
+          <>
+            <hr />
+            <h6>Pending requests</h6>
+            <ListGroup>
+              {pendingFriends.map((friend, i) => {
+                return (
+                  <ListGroup.Item
+                    action="true"
+                    key={i}
+                    onClick={() => userClick(friend.data.username)}
+                  >
+                    {friend.data.username}
+                  </ListGroup.Item>
+                );
+              })}
+            </ListGroup>
+          </>
+        )}
         {username !== null && <StatusUpdates userId={profile.id} />}
       </Container>
     </div>
