@@ -24,3 +24,6 @@ export const postStatusUpdate = (userId, description) =>
       method: "POST",
     }
   );
+
+export const searchUsers = (search) =>
+  fetch(`${base}/users?search=${encodeURI(search)}`);
