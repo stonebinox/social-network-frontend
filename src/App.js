@@ -18,6 +18,10 @@ function App() {
       .then((data) => {
         const { data: notificationList } = data;
         setNotifications(notificationList);
+
+        setTimeout(() => {
+          loadNotifications(userId);
+        }, 5000);
       })
       .catch((e) => {
         console.log(e);
