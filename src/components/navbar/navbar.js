@@ -7,6 +7,7 @@ import {
   Navbar,
   Row,
   ListGroup,
+  Nav,
 } from "react-bootstrap";
 import { login, searchUsers } from "../../api/api";
 import "./navbar.css";
@@ -16,6 +17,7 @@ export const NavbarComponent = ({
   loggedIn,
   logout,
   setSelectedUser,
+  notificationsCount = 0,
 }) => {
   const [username, setUsername] = useState("");
   const [search, setSearch] = useState("");
@@ -97,6 +99,13 @@ export const NavbarComponent = ({
           <>
             <Form inline="true" onSubmit={(e) => e.preventDefault()}>
               <Row>
+                <Col xs="auto">
+                  <Nav>
+                    <Nav.Link href="#">
+                      Notifications ({notificationsCount})
+                    </Nav.Link>
+                  </Nav>
+                </Col>
                 <Col xs="auto">
                   <Form.Control
                     type="search"

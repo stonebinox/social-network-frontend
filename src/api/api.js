@@ -45,3 +45,6 @@ export const rejectRequest = (id) =>
   fetch(`${base}/friend/reject?request_id=${id}`, {
     method: "POST",
   });
+
+export const getNotifications = (userId) =>
+  fetch(`${base}/notifications?user_id=${userId}`);
