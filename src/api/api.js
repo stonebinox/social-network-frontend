@@ -13,3 +13,6 @@ export const getUserFriends = (userId) =>
 
 export const getUserDataById = (userId) =>
   fetch(`${base}/user/id?id=${userId}`);
+
+export const getStatusUpdates = (userId) =>
+  fetch(`${base}/status/user?user_id=${userId}`);
